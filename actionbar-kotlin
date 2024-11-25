@@ -1,0 +1,74 @@
+package com.example.login
+
+import android.os.Bundle
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.ImageButton
+import android.widget.PopupMenu
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Inflate the custom action bar layout
+        val actionBarView: View = layoutInflater.inflate(R.layout.actionbar, null)
+        supportActionBar?.apply {
+            displayOptions = androidx.appcompat.app.ActionBar.DISPLAY_SHOW_CUSTOM
+            customView = actionBarView
+        }
+
+        // Initialize views from actionbar.xml
+        val backButton: ImageButton = actionBarView.findViewById(R.id.left)
+        val titleText: TextView = actionBarView.findViewById(R.id.text)
+        val rightButton: ImageButton = actionBarView.findViewById(R.id.right)
+
+        // Set up back button functionality
+        backButton.setOnClickListener {
+            finish() // Closes the current activity and navigates back
+        }
+
+        // Set the title (optional)
+        titleText.text = "Pizza Bar" // Set dynamically if needed
+
+        // Set up right button (menu) functionality
+        rightButton.setOnClickListener { view ->
+            showPopupMenu(view)
+        }
+    }
+
+    // Function to show the popup menu
+    private fun showPopupMenu(view: View) {
+        val popupMenu = PopupMenu(this, view)
+        val inflater: MenuInflater = popupMenu.menuInflater
+        inflater.inflate(R.menu.menu_pizza_options, popupMenu.menu) // Inflate the menu file
+        popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
+            handleMenuItemClick(menuItem)
+        }
+        popupMenu.show()
+    }
+
+    // Function to handle menu item clicks
+    private fun handleMenuItemClick(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.menu_order -> {
+                Toast.makeText(this, "Order option selected", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.menu_favorites -> {
+                Toast.makeText(this, "Favorites option selected", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.menu_settings -> {
+                Toast.makeText(this, "Settings option selected", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> false
+        }
+    }
+}
